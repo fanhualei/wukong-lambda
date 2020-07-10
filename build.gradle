@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.projectlombok:lombok:1.18.12"
+    annotationProcessor "org.projectlombok:lombok:1.18.12"
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+
+task copyTestResources(type: Copy) {
+    println "copy test resource files"
+    from sourceSets.test.resources
+    into sourceSets.test.java.outputDir
+    processResources.exclude("**/*.*")
+}
+processTestResources.dependsOn copyTestResources
+
+// copy the resources file to class dir
+task cpRes(type:Copy){
+    println "copy resource files"
+    from sourceSets.main.resources
+    into sourceSets.main.java.outputDir
+    processResources.exclude("**/*.*")
+}
+processResources.dependsOn(cpRes)
